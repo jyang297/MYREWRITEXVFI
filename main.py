@@ -13,9 +13,18 @@ def parse_args():
     desc = "Pytorch implementation for my XVFI"
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("--gpu", type=int, default=0, help="gpu index")
-    
+    parser.add_argument("--net_type", type=str, default=['XVFInet'], help="The type of my network")
+    parser.add_argument("--exp_num", type=int, default=1, help="The experiment number")
+    parser.add_argument("--phase", type=str, default="test", choices=['train', 'test', 'metrics_evaluation'],)
+    parser.add_argument("--continue_training", action='store_true', default=False, help='continue the training')
 
-    return check_args(parser])
+    """ Information of directories"""
+    parser.add_argument("--test_img_dir", type=str, default="./test_img_dir", help='test_img_dir path. Default at ./test_img_dir')
+    parser.add_argument("test_dir", type=str, default="./test_dir", help="test_dir path. Default at ./test_dir")
+    parser.add_argument("--checkpoint_dir", type=str, default='./checkpoint_dir', help="checkpoint directory. Default at ./checkpoint_dir")
+    parser.add_argument("--log_dir", type=str, default='./log_dir', help="Directory name to save training logs. Default at ./log_dir"
+
+    return check_args(parser)
 
 def check_folder(log_dir):
     if not os.path.exist(log_dir):
