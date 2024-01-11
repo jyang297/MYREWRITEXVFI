@@ -50,9 +50,27 @@ class save_manager():
         checkpoint = torch.load(os.path.join(self.checkpoint_dir, self.model_dir + '_epc' + str(epoch - 1) + '.pt'))
         print("Load model '{}', epoch: {}, best PSNR: {:3f}".format())
 
+    def load_model(self, ):
+        # checkpoint = torch.load(self.checkpoint_dir + '/' + self.model_dir + '_latest.pt')
+        checkpoint = torch.load(os.path.join(self.checkpoint_dir, self.model_dir + '_latest.pt'), map_location='cuda:0')
+        print("load model '{}', epoch: {},".format(
+            os.path.join(self.checkpoint_dir, self.model_dir + '_latest.pt'), checkpoint['last_epoch'] + 1))
+        return checkpoint
+
+    def load_best_PSNR_model(self, ):
+        checkpoint = torch.load(os.path.join(self.checkpoint_dir, self.model_dir + '_best_PSNR.pt'))
+        print("load _best_PSNR model '{}', epoch: {}, best_PSNR: {:3f}, best_SSIM: {:3f}".format(
+            os.path.join(self.checkpoint_dir, self.model_dir + '_best_PSNR.pt'), checkpoint['last_epoch'] + 1,
+            checkpoint['best_PSNR'], checkpoint['best_SSIM']))
+        return checkpoint
+
 class HelloWorld():
     def hello():
         print("Hellooooooo!")
+
+
+
+        
         
         
 

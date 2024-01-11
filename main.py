@@ -42,7 +42,7 @@ def parse_args():
     parser.add_argument("--weight_decay", type=float, default=0, help="optim, weight decay (default=0)")
     parser.add_argument("--need_patch", default=True, help='get patch from image while training')
     parser.add_argument("--img_ch", type=int, default=3, help="the channel for image")
-    parser.add_argument("--loss_type", default="L1", choices=["L1", 'MSE', "L1_Charbonnier_loss", help="loss type"])
+    parser.add_argument("--loss_type", default="L1", choices=["L1", 'MSE', "L1_Charbonnier_loss"], help="loss type")
     parser.add_argument("--S_trn", type=int, default=3, help="The lowest scale depth for training")
     parser.add_argument("S_tst", type=int, default=5, help="The lowest scale depth for test")
 
@@ -52,7 +52,7 @@ def parse_args():
     """ Setting for Testing (when [phase=='test] or 'test_custom)"""
     parser.add_argument('--saving_flow_flag', default=False)
     parser.add_argument("--multiple", type=int, default=8, help="Due to the indexing problem of the file names, we recomend to use the power of 2. (2, 4, 8...)")
-    parser.add_argument("--metrics_types", type=list, default=["PSNR", "SSIM", "tOF", choices=["PSNR", "SSIM", "tOF"]])
+    parser.add_argument("--metrics_types", type=list, default=["PSNR", "SSIM", "tOF"], choices=["PSNR", "SSIM", "tOF"])
 
     """ Settings for test_custom (when [phase=='test_custom'])"""
     parser.add_argument("custom_path", type=str, default='./custom_path', help='path for custom video containing frames')
@@ -148,7 +148,8 @@ def main():
 
 
     
-    print()
+    print("\n------------ Test End------------\n")
+    print("Exp:", args.exp_num)
 
 
     def weights_init(m):
