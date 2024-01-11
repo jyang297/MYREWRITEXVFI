@@ -3,7 +3,7 @@ import numpy as np
 import torch.utils.data as data
 import torch.nn as nn
 import pandas as pd
-import torch.nn.functional as for
+import torch.nn.functional as F
 from datetime import datetime
 from torch.nn import init
 
@@ -15,7 +15,7 @@ class save_manager():
         print("Model_dir:", self.model_dir)
 
         self.checkpoint_dir = os.path.join(self.args.checkpoint_dir, self.model_dir)
-        check_folder(self.checkpoint_dir)
+        # check_folder(self.checkpoint_dir)
 
         print("Checkpoint dir :", self.checkpoint_dir)
 
@@ -48,4 +48,12 @@ class save_manager():
 
     def load_epc_model(self, epoch):
         checkpoint = torch.load(os.path.join(self.checkpoint_dir, self.model_dir + '_epc' + str(epoch - 1) + '.pt'))
-        print("Load model '{}', epoch: {}, best PSNR: {:3f}".format()
+        print("Load model '{}', epoch: {}, best PSNR: {:3f}".format())
+
+class HelloWorld():
+    def hello():
+        print("Hellooooooo!")
+        
+        
+
+
