@@ -1,4 +1,4 @@
-import argparse, torch, cv2, torch.utils.data, math
+import argparse, torch, cv2, torch.utils.data, math, time
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
 import numpy as np
@@ -6,7 +6,7 @@ import os
 
 from torch.autograd import Variable
 from utils import *
-from XVFInet import *
+from myXVFInet import *
 from collections import Counter
 
 def parse_args():
@@ -163,5 +163,39 @@ def main():
 # get_test_data
                 
 # train
-                
+def train(model_net, criterion, device, save_manager, args):
+    SM = save_manager
+    multi_scale_recon_loss = criterion[1]
+
+    optimizer = optim.Adam(model_net.parameters(), lr=args.init_lr, beta=(0.9, 0.999),
+                           weight_decay=args.weight_decay)
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer=optimizer, milestones=args.lr_milestones, gamma=args.lr_dec_fac)
+    last_epoch = 0
+    best_PSNR = 0
+
+    if args.continue_training:
+        checkpoint = SM.load_model()
+        last_epoch = checkpoint['last_epoch' ] + 1
+        best_PSNR = checkpoint['best_PSNR']
+        model_net.load_state_dict(checkpoint['state_dict_Model'])
+        optimizer.load_state_dict(checkpoint['state_dict_Optimizer'])
+        scheduler.load_state_dict(checkpoint['state_dict_Scheduler'])
+        print("Optimizer and Scheduler have been reloaded. ")
+    scheduler.milestones = Counter(args.lr_milestones)
+    scheduler.gamma = args.lr_dec_fac
+    print("scheduler.milestones : {}, scheduler.gamma : {}".format(scheduler.milestones, scheduler.gamma))
+    start_epoch = last_epoch
+
+    model_net.train()
+
+    start_time = time.time()
+
+    SM.write_info('Epoch\t trainLoss \t testPSNR \t best_PSNR\n')
+    print("[*] Training starts")
+
+    # Main training loop for total epochs (start from 'epoch=0')
+    valid_loader = get_test_data(args, multiple=4, validation=True)  # multiple is only used for X4K1000FPS
+
+
+
 # test

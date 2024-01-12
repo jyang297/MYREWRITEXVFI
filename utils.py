@@ -6,7 +6,29 @@ import pandas as pd
 import torch.nn.functional as F
 from datetime import datetime
 from torch.nn import init
+import datasets
 
+
+def set_rec_loss(args):
+    loss_type = args.loss_type
+    if loss_type == "MSE":
+        lossfunction = nn.MSELoss()
+    elif loss_type == "L1":
+        lossfunction = nn.L1Loss()
+    elif loss_type == "L1_Charbonnier_loss":
+        lossfunction = L1_Charbonnier_loss()
+    
+    return lossfunction
+
+class L1_Charbonnier_loss(torch.nn.Module):
+    def __init__(self):
+        super(L1_Charbonnier_loss,self).__init__()
+        self.epsilon = 1e-3
+    
+    def forward(self, X, Y):
+        loss = torch.mean(torch.sqrt((X - Y) ** 2 + self.epsilon ** 2))
+        return loss
+    
 
 class save_manager():
     def __init__(self, args):
@@ -63,6 +85,17 @@ class save_manager():
             os.path.join(self.checkpoint_dir, self.model_dir + '_best_PSNR.pt'), checkpoint['last_epoch'] + 1,
             checkpoint['best_PSNR'], checkpoint['best_SSIM']))
         return checkpoint
+
+# def get_test_data(args, multiple, validation):
+#    if args.dataset == "X4K1000FPS" and args.phase != 'test_custom':
+        # data_test = X_Test()
+
+
+
+        
+    
+    
+
 
 class HelloWorld():
     def hello():
